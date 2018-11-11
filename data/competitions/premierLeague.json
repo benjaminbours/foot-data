@@ -1,0 +1,224 @@
+{
+    "teams": [
+        {
+            "name": "Manchester City",
+            "shortName": "Man City",
+            "slugName": "manchester-city",
+            "id": 281,
+            "squad": 26,
+            "age": 26.3,
+            "foreigners": 21,
+            "totalMarketValue": "1,09 Bill. €",
+            "averageMarketValue": "41,98 Mill. €"
+        },
+        {
+            "name": "Liverpool FC",
+            "shortName": "Liverpool",
+            "slugName": "liverpool-fc",
+            "id": 31,
+            "squad": 25,
+            "age": 26.4,
+            "foreigners": 16,
+            "totalMarketValue": "913,00 Mill. €",
+            "averageMarketValue": "36,52 Mill. €"
+        },
+        {
+            "name": "Chelsea FC",
+            "shortName": "Chelsea",
+            "slugName": "chelsea-fc",
+            "id": 631,
+            "squad": 27,
+            "age": 27.9,
+            "foreigners": 22,
+            "totalMarketValue": "891,75 Mill. €",
+            "averageMarketValue": "33,03 Mill. €"
+        },
+        {
+            "name": "Tottenham Hotspur",
+            "shortName": "Spurs",
+            "slugName": "tottenham-hotspur",
+            "id": 148,
+            "squad": 26,
+            "age": 26.9,
+            "foreigners": 19,
+            "totalMarketValue": "837,50 Mill. €",
+            "averageMarketValue": "32,21 Mill. €"
+        },
+        {
+            "name": "Manchester United",
+            "shortName": "Man Utd",
+            "slugName": "manchester-united",
+            "id": 985,
+            "squad": 26,
+            "age": 27.3,
+            "foreigners": 19,
+            "totalMarketValue": "835,00 Mill. €",
+            "averageMarketValue": "32,12 Mill. €"
+        },
+        {
+            "name": "Arsenal FC",
+            "shortName": "Arsenal",
+            "slugName": "arsenal-fc",
+            "id": 11,
+            "squad": 25,
+            "age": 27.1,
+            "foreigners": 21,
+            "totalMarketValue": "574,00 Mill. €",
+            "averageMarketValue": "22,96 Mill. €"
+        },
+        {
+            "name": "Everton FC",
+            "shortName": "Everton",
+            "slugName": "everton-fc",
+            "id": 29,
+            "squad": 28,
+            "age": 26.1,
+            "foreigners": 15,
+            "totalMarketValue": "426,00 Mill. €",
+            "averageMarketValue": "15,21 Mill. €"
+        },
+        {
+            "name": "Leicester City",
+            "shortName": "Leicester",
+            "slugName": "leicester-city",
+            "id": 1003,
+            "squad": 28,
+            "age": 27.5,
+            "foreigners": 19,
+            "totalMarketValue": "344,50 Mill. €",
+            "averageMarketValue": "12,30 Mill. €"
+        },
+        {
+            "name": "West Ham United",
+            "shortName": "West Ham",
+            "slugName": "west-ham-united",
+            "id": 379,
+            "squad": 25,
+            "age": 28.3,
+            "foreigners": 18,
+            "totalMarketValue": "287,50 Mill. €",
+            "averageMarketValue": "11,50 Mill. €"
+        },
+        {
+            "name": "Southampton FC",
+            "shortName": "Southampton",
+            "slugName": "southampton-fc",
+            "id": 180,
+            "squad": 25,
+            "age": 26.5,
+            "foreigners": 13,
+            "totalMarketValue": "266,10 Mill. €",
+            "averageMarketValue": "10,64 Mill. €"
+        },
+        {
+            "name": "Fulham FC",
+            "shortName": "Fulham",
+            "slugName": "fulham-fc",
+            "id": 931,
+            "squad": 25,
+            "age": 26.1,
+            "foreigners": 20,
+            "totalMarketValue": "250,50 Mill. €",
+            "averageMarketValue": "10,02 Mill. €"
+        },
+        {
+            "name": "Crystal Palace",
+            "shortName": "Crystal Palace",
+            "slugName": "crystal-palace",
+            "id": 873,
+            "squad": 26,
+            "age": 27.9,
+            "foreigners": 17,
+            "totalMarketValue": "219,25 Mill. €",
+            "averageMarketValue": "8,43 Mill. €"
+        },
+        {
+            "name": "Wolverhampton Wanderers",
+            "shortName": "Wolves",
+            "slugName": "wolverhampton-wanderers",
+            "id": 543,
+            "squad": 23,
+            "age": 25.5,
+            "foreigners": 15,
+            "totalMarketValue": "218,00 Mill. €",
+            "averageMarketValue": "9,48 Mill. €"
+        },
+        {
+            "name": "AFC Bournemouth",
+            "shortName": "Bournemouth",
+            "slugName": "afc-bournemouth",
+            "id": 989,
+            "squad": 24,
+            "age": 27.4,
+            "foreigners": 9,
+            "totalMarketValue": "192,25 Mill. €",
+            "averageMarketValue": "8,01 Mill. €"
+        },
+        {
+            "name": "Burnley FC",
+            "shortName": "Burnley",
+            "slugName": "burnley-fc",
+            "id": 1132,
+            "squad": 24,
+            "age": 29.2,
+            "foreigners": 11,
+            "totalMarketValue": "181,75 Mill. €",
+            "averageMarketValue": "7,57 Mill. €"
+        },
+        {
+            "name": "Brighton & Hove Albion",
+            "shortName": "Brighton",
+            "slugName": "brighton-amp-hove-albion",
+            "id": 1237,
+            "squad": 24,
+            "age": 28.1,
+            "foreigners": 18,
+            "totalMarketValue": "177,00 Mill. €",
+            "averageMarketValue": "7,38 Mill. €"
+        },
+        {
+            "name": "Newcastle United",
+            "shortName": "Newcastle",
+            "slugName": "newcastle-united",
+            "id": 762,
+            "squad": 25,
+            "age": 27.1,
+            "foreigners": 19,
+            "totalMarketValue": "174,00 Mill. €",
+            "averageMarketValue": "6,96 Mill. €"
+        },
+        {
+            "name": "Watford FC",
+            "shortName": "Watford",
+            "slugName": "watford-fc",
+            "id": 1010,
+            "squad": 31,
+            "age": 27.4,
+            "foreigners": 24,
+            "totalMarketValue": "167,70 Mill. €",
+            "averageMarketValue": "5,41 Mill. €"
+        },
+        {
+            "name": "Huddersfield Town",
+            "shortName": "Huddersfield",
+            "slugName": "huddersfield-town",
+            "id": 1110,
+            "squad": 26,
+            "age": 25.9,
+            "foreigners": 21,
+            "totalMarketValue": "120,60 Mill. €",
+            "averageMarketValue": "4,64 Mill. €"
+        },
+        {
+            "name": "Cardiff City",
+            "shortName": "Cardiff",
+            "slugName": "cardiff-city",
+            "id": 603,
+            "squad": 27,
+            "age": 28.3,
+            "foreigners": 26,
+            "totalMarketValue": "94,10 Mill. €",
+            "averageMarketValue": "3,49 Mill. €"
+        }
+    ]
+}
