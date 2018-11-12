@@ -2,13 +2,6 @@ import fs from "fs";
 import { JSDOM } from "jsdom";
 
 export interface IPlayerMatchData {
-    day: number;
-    date: string;
-    homeTeam: string;
-    homeTeamRanking: number;
-    awayTeam: string;
-    awayTeamRanking: number;
-    result: string;
     position: string;
     goals: number;
     assists: number;
@@ -21,6 +14,16 @@ export interface IPlayerMatchData {
     minutesPlayed: number;
 }
 
+export interface IDayMatchData {
+    day: number;
+    date: string;
+    homeTeam: string;
+    homeTeamRanking: number;
+    awayTeam: string;
+    awayTeamRanking: number;
+    result: string;
+    playerData: Bench | IPlayerMatchData;
+}
 export type Bench = "on the bench";
 
 function getNumberInCell(cell: HTMLElement) {
@@ -38,7 +41,7 @@ function getMinuteInCell(cell: HTMLElement) {
     return content.length > 0 ? Number(content.split("'")[0]) : 0;
 }
 
-fs.readFile("./html/players/artur-boruc.html", (err, data) => {
+fs.readFile("./html/players/andrew-surman.html", (err, data) => {
     const dom = new JSDOM(data);
     const boxes = dom.window.document.querySelectorAll(".box");
 
@@ -48,25 +51,33 @@ fs.readFile("./html/players/artur-boruc.html", (err, data) => {
             const table = boxes[i].querySelector("table");
             if (table) {
                 const rows: [] = Array.prototype.slice.call(table.querySelectorAll("tbody tr"));
-                const matchesData: Array<IPlayerMatchData | Bench> = rows.map((row: HTMLElement) => {
+                const matchesData: IDayMatchData[] = rows.map((row: HTMLElement) => {
+                    let matchData: IDayMatchData;
                     const cells = row.querySelectorAll("td");
-                    const rowContent = row.textContent as string;
-                    if (rowContent.includes("on the bench")) {
-                        return "on the bench";
-                    }
 
                     const day = Number(cells[0].textContent);
                     const date = cells[1].textContent as string;
-
                     const homeTeamCell = (cells[3].textContent as string).split("(");
                     const homeTeam = homeTeamCell[0].slice(0, -2);
                     const homeTeamRanking = Number(homeTeamCell[1].split(".")[0]);
-
                     const awayTeamCell = (cells[5].textContent as string).split("(");
                     const awayTeam = awayTeamCell[0].slice(0, -2);
                     const awayTeamRanking = Number(awayTeamCell[1].split(".")[0]);
-
                     const result = (cells[6].textContent as string).slice(0, -1);
+
+                    const rowContent = row.textContent as string;
+                    if (rowContent.includes("on the bench")) {
+                        return matchData = {
+                            day,
+                            date,
+                            homeTeam,
+                            homeTeamRanking,
+                            awayTeam,
+                            awayTeamRanking,
+                            result,
+                            playerData: "on the bench",
+                        };
+                    }
 
                     const position = cells[7].textContent as string;
 
@@ -81,7 +92,7 @@ fs.readFile("./html/players/artur-boruc.html", (err, data) => {
                     const substitutedOff = getMinuteInCell(cells[15]);
                     const minutesPlayed = getMinuteInCell(cells[16]);
 
-                    const matchData: IPlayerMatchData = {
+                    matchData = {
                         day,
                         date,
                         homeTeam,
@@ -89,16 +100,18 @@ fs.readFile("./html/players/artur-boruc.html", (err, data) => {
                         awayTeam,
                         awayTeamRanking,
                         result,
-                        position,
-                        goals,
-                        assists,
-                        ownGoals,
-                        yellowCards,
-                        secondYellows,
-                        redCards,
-                        substitutedOn,
-                        substitutedOff,
-                        minutesPlayed,
+                        playerData: {
+                            position,
+                            goals,
+                            assists,
+                            ownGoals,
+                            yellowCards,
+                            secondYellows,
+                            redCards,
+                            substitutedOn,
+                            substitutedOff,
+                            minutesPlayed,
+                        },
                     };
                     return matchData;
                 });
