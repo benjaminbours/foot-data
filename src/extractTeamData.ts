@@ -17,7 +17,7 @@ export interface IPlayerData {
     marketValue: string;
 }
 
-export async function extractTeamData(fileName: string) {
+export async function extractTeamData(fileName: string, teamId: number) {
     fs.readFile(path.join(__dirname, `../html/teams/${fileName}.html`), (err, data) => {
         const dom = new JSDOM(data);
         const tables = dom.window.document.querySelectorAll("table");
@@ -73,6 +73,7 @@ export async function extractTeamData(fileName: string) {
 
         const obj = {
             players,
+            id: teamId,
         };
 
         const json = JSON.stringify(obj);

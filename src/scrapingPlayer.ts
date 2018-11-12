@@ -19,15 +19,22 @@ export async function getPageContent(url: string, name: string) {
     });
 
     // const evaluate = await page.evaluate(() => console.log("yo"));
-    // page.on("onLoadFinished", async () => {
-    //     fs.writeFile(`${name}.html`, content, async (err) => {
-    //         if (err) {
-    //             throw err;
-    //         }
-    //         console.log("Saved!");
-    //         await instance.exit();
-    //     });
-    // });
+    page.on("onLoadFinished", async () => {
+        // fs.writeFile(`${name}.html`, content, async (err) => {
+        //     if (err) {
+        //         throw err;
+        //     }
+        //     console.log("Saved!");
+        //     await instance.exit();
+        // });
+        fs.writeFile(path.join(__dirname, `../html/players/${name}.html`), content, async (err) => {
+            if (err) {
+                throw err;
+            }
+            console.log("Saved!");
+            await instance.exit();
+        });
+    });
 }
 
 // getPageContent("https://www.transfermarkt.co.uk/pierre-emerick-aubameyang/leistungsdatendetails/spieler/58864/saison/2018/verein/11/liga/0/wettbewerb/GB1/pos/0/trainer_id/0/plus/1");

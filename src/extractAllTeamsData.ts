@@ -8,5 +8,5 @@ const teams: IClubData[] = JSON.parse(premierLeague).teams;
 
 teams.forEach(async (item) => {
     console.log(item.slugName);
-    await extractTeamData(item.slugName);
+    await extractTeamData(item.slugName, item.id);
 });
