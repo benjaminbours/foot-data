@@ -1,7 +1,7 @@
 import fs from "fs";
 import { JSDOM } from "jsdom";
 
-interface IPlayerMatchData {
+export interface IPlayerMatchData {
     day: number;
     date: string;
     homeTeam: string;
@@ -104,4 +104,4 @@ fs.readFile("player.html", (err, data) => {
 
     console.log(arrRowContent);
 
-  });
+});

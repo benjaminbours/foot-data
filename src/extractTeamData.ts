@@ -6,6 +6,7 @@ export interface IPlayerData {
     shirtNumber: number;
     firstName: string;
     lastName: string;
+    id: number;
     mainPosition: string;
     dateOfBirth: string;
     age: number;
@@ -24,15 +25,18 @@ export async function extractTeamData(fileName: string) {
 
         const rows: [] = Array.prototype.slice.call(tableCurrentSeason.querySelectorAll("tbody tr.odd, tbody tr.even"));
 
-        const arrRowContent = rows.map((row: HTMLElement) => {
+        const players = rows.map((row: HTMLElement) => {
             const cells = row.querySelectorAll("td");
 
             const shirtNumber = Number(cells[0].textContent);
 
-            const fullName = (cells[1].querySelector(".spielprofil_tooltip.tooltipstered") as HTMLElement).textContent as string;
+            const nameDomElement = cells[1].querySelector(".spielprofil_tooltip.tooltipstered") as HTMLElement;
+
+            const fullName = nameDomElement.textContent as string;
             const nameSplit = fullName.split(" ");
             const firstName = nameSplit[0];
             const lastName = nameSplit[1];
+            const id = Number(nameDomElement.id);
 
             const mainPosition = cells[1].querySelectorAll("tr")[1].textContent as string;
 
@@ -54,6 +58,7 @@ export async function extractTeamData(fileName: string) {
                 shirtNumber,
                 firstName,
                 lastName,
+                id,
                 mainPosition,
                 dateOfBirth,
                 age,
@@ -67,7 +72,7 @@ export async function extractTeamData(fileName: string) {
         });
 
         const obj = {
-            arrRowContent,
+            players,
         };
 
         const json = JSON.stringify(obj);

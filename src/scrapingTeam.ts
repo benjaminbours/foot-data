@@ -3,7 +3,6 @@ import path from "path";
 import * as phantom from "phantom";
 
 export async function getTeamContent(url: string, name: string) {
-
     const instance: phantom.PhantomJS = await phantom.create();
     const page: phantom.WebPage = await instance.createPage();
     const status: string = await page.open(url);
