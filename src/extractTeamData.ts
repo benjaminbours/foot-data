@@ -1,11 +1,13 @@
 import fs from "fs";
 import { JSDOM } from "jsdom";
 import path from "path";
+import slugify from "./slugify";
 
 export interface IPlayerData {
     shirtNumber: number;
     firstName: string;
     lastName: string;
+    slugName: string;
     id: number;
     mainPosition: string;
     dateOfBirth: string;
@@ -37,6 +39,7 @@ export async function extractTeamData(fileName: string, teamId: number) {
             const firstName = nameSplit[0];
             const lastName = nameSplit[1];
             const id = Number(nameDomElement.id);
+            const slugName = slugify(`${firstName}-${lastName}`);
 
             const mainPosition = cells[1].querySelectorAll("tr")[1].textContent as string;
 
@@ -59,6 +62,7 @@ export async function extractTeamData(fileName: string, teamId: number) {
                 firstName,
                 lastName,
                 id,
+                slugName,
                 mainPosition,
                 dateOfBirth,
                 age,
