@@ -20,20 +20,20 @@ export async function getPageContent(url: string, name: string, folderPath: stri
 
     // const evaluate = await page.evaluate(() => console.log("yo"));
     // page.on("onLoadFinished", async () => {
-    //     // fs.writeFile(`${name}.html`, content, async (err) => {
-    //     //     if (err) {
-    //     //         throw err;
-    //     //     }
-    //     //     console.log("Saved!");
-    //     //     await instance.exit();
-    //     // });
-    //     fs.writeFile(path.join(__dirname, `../html/players/${name}.html`), content, async (err) => {
-    //         if (err) {
-    //             throw err;
-    //         }
-    //         console.log("Saved!");
-    //         await instance.exit();
-    //     });
+        // fs.writeFile(`${name}.html`, content, async (err) => {
+        //     if (err) {
+        //         throw err;
+        //     }
+        //     console.log("Saved!");
+        //     await instance.exit();
+        // });
+        // fs.writeFile(`${folderPath}/${name}.html`, content, async (err) => {
+        //     if (err) {
+        //         throw err;
+        //     }
+        //     console.log("Saved!");
+        //     await instance.exit();
+        // });
     // });
 }
 

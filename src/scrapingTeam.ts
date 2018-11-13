@@ -18,5 +18,3 @@ export async function getTeamContent(url: string, name: string) {
         await instance.exit();
     });
 }
-
-// getTeamContent("https://www.transfermarkt.com/fc-arsenal/kader/verein/11/saison_id/2018/plus/1", "arsenal");
