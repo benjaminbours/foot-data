@@ -1,0 +1,43 @@
+type User {
+  id: ID! @unique
+  name: String!
+}
+
+type Competition {
+  id: ID! @unique
+  name: String! @unique
+  teams: [Team!]!
+}
+
+type Team {
+  id: ID! @unique
+  name: String!
+  shortName: String!
+  slugName: String! @unique
+  originId: Int!
+  squad: Int!
+  age: Float!
+  foreigners: Int!
+  totalMarketValue: String!
+  averageMarketValue: String!
+  league: Competition!
+  players: [Player!]!
+}
+
+type Player {
+  id: ID! @unique
+  shirtNumber: Int!
+  firstName: String!
+  lastName: String!
+  slugName: String! @unique
+  originId: Int!
+  mainPosition: String!
+  dateOfBirth: String!
+  age: Int!
+  height: String!
+  foot: String!
+  joined: String!
+  contractUntil: String!
+  marketValue: String!
+  team: Team!
+}

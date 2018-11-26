@@ -10,7 +10,7 @@ async function getPageContent(url: string) {
     const evaluate = await page.evaluate(() => {
         // console.log("YO");
     });
-    fs.writeFile(path.join(__dirname, "../html/competitions/premierLeague.html"), content, async (err) => {
+    fs.writeFile(path.join(__dirname, "../../html/competitions/premierLeague.html"), content, async (err) => {
         if (err) {
             throw err;
         }

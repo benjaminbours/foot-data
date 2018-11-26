@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { IPlayerData } from "./extractTeamData";
+import { IPlayer } from "../../types";
 import { getPageContent } from "./scrapingPlayer";
 import slugify from "./slugify";
 
@@ -14,7 +14,7 @@ async function processItems(index: number) {
     console.log(files[index]);
     const team = fs.readFileSync(`${teamsFolder}/${files[index]}`).toString("utf-8");
     const teamParse = JSON.parse(team);
-    const players: IPlayerData[] = teamParse.players;
+    const players: IPlayer[] = teamParse.players;
     const teamId = teamParse.id;
     const folderPath = `${playersHTMLFolder}/${files[index].split(".")[0]}`;
     if (!fs.existsSync(folderPath)) {
@@ -23,7 +23,7 @@ async function processItems(index: number) {
 
     for (const player of players) {
       const slugPlayerName = slugify(`${player.firstName}-${player.lastName}`);
-      await getPageContent(`https://www.transfermarkt.com/${slugPlayerName}/leistungsdatendetails/spieler/${player.id}/saison/2018/verein/${teamId}/liga/0/wettbewerb/GB1/pos/0/trainer_id/0/plus/1`, slugPlayerName, folderPath);
+      await getPageContent(`https://www.transfermarkt.com/${slugPlayerName}/leistungsdatendetails/spieler/${player.originId}/saison/2018/verein/${teamId}/liga/0/wettbewerb/GB1/pos/0/trainer_id/0/plus/1`, slugPlayerName, folderPath);
     }
 
     processItems(index + 1);

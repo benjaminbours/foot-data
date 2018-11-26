@@ -1,0 +1,27 @@
+version: '3'
+services:
+  app:
+    container_name: foot-data-backend
+    restart: always
+    volumes:
+      - .:/user/src/app
+    build: .
+    ports:
+      - "3000:3000"
+    tty: true
+    links:
+      - mongo
+
+  mongo:
+    container_name: mongo-foot-data
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - db_data:/data/db
+      - ./data:/myData
+    restart: always
+
+volumes:
+  db_data:
+

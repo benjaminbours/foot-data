@@ -1,27 +1,16 @@
 import fs from "fs";
 import { JSDOM } from "jsdom";
 import path from "path";
+import { IClub } from "../../types";
 
-export interface IClubData {
-    name: string;
-    shortName: string;
-    slugName: string;
-    id: number;
-    squad: number;
-    age: number;
-    foreigners: number;
-    totalMarketValue: string;
-    averageMarketValue: string;
-}
-
-fs.readFile(path.join(__dirname, "../html/competitions/premierLeague.html"), (err, data) => {
+fs.readFile(path.join(__dirname, "../../html/competitions/premierLeague.html"), (err, data) => {
     const dom = new JSDOM(data);
     const table = dom.window.document.querySelector("#yw1") as HTMLElement;
     const rows: [] = Array.prototype.slice.call(table.querySelectorAll("tbody tr"));
 
-    const arrRowContent: IClubData[] = rows.map((row: HTMLElement) => {
+    const teams: IClub[] = rows.map((row: HTMLElement) => {
         const cells = row.querySelectorAll("td");
-        const id = Number((cells[1].querySelector("a") as HTMLElement).id);
+        const originId = Number((cells[1].querySelector("a") as HTMLElement).id);
         let name = (cells[1].textContent as string).slice(0, -1);
         while (name.charAt(name.length - 1) === " ") {
             name = name.slice(0, -1);
@@ -33,11 +22,11 @@ fs.readFile(path.join(__dirname, "../html/competitions/premierLeague.html"), (er
         const foreigners = Number(cells[5].textContent);
         const totalMarketValue = cells[6].textContent as string;
         const averageMarketValue = cells[7].textContent as string;
-        const clubData: IClubData = {
+        const clubData: IClub = {
             name,
             shortName,
             slugName,
-            id,
+            originId,
             squad,
             age,
             foreigners,
@@ -47,12 +36,12 @@ fs.readFile(path.join(__dirname, "../html/competitions/premierLeague.html"), (er
         return clubData;
     });
 
-    const premierLeague = {
-        teams: arrRowContent,
-    };
+    // const premierLeague = {
+    //     teams: arrRowContent,
+    // };
 
-    const json = JSON.stringify(premierLeague);
-    fs.writeFile(path.join(__dirname, "../data/competitions/premierLeague.json"), json, () => {
+    const json = JSON.stringify(teams);
+    fs.writeFile(path.join(__dirname, "../../data/competitions/premierLeague.json"), json, () => {
         console.log("saved");
     });
 
