@@ -15,14 +15,14 @@ export async function extractTeamData(fileName: string, teamId: number) {
         const players = rows.map((row: HTMLElement) => {
             const cells = row.querySelectorAll("td");
 
-            const shirtNumber = Number(cells[0].textContent);
+            const shirtNumber = Number(cells[0].textContent) ? Number(cells[0].textContent) : 0;
 
             const nameDomElement = cells[1].querySelector(".spielprofil_tooltip.tooltipstered") as HTMLElement;
 
             const fullName = nameDomElement.textContent as string;
             const nameSplit = fullName.split(" ");
             const firstName = nameSplit[0];
-            const lastName = nameSplit[1];
+            const lastName = nameSplit[1] ? nameSplit[1] : "none";
             const originId = Number(nameDomElement.id);
             const slugName = slugify(`${firstName}-${lastName}`);
 

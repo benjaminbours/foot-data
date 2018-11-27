@@ -1037,7 +1037,7 @@ export interface TeamUpsertWithWhereUniqueWithoutLeagueInput {
 
 export type PlayerWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
-  slugName?: String;
+  originId?: Int;
 }>;
 
 export interface UserSubscriptionWhereInput {

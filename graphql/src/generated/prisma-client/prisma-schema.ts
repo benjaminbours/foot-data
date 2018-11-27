@@ -589,7 +589,7 @@ input PlayerWhereInput {
 
 input PlayerWhereUniqueInput {
   id: ID
-  slugName: String
+  originId: Int
 }
 
 type Query {

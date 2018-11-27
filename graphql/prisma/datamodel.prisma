@@ -29,8 +29,8 @@ type Player {
   shirtNumber: Int!
   firstName: String!
   lastName: String!
-  slugName: String! @unique
-  originId: Int!
+  slugName: String!
+  originId: Int! @unique
   mainPosition: String!
   dateOfBirth: String!
   age: Int!
@@ -40,4 +40,40 @@ type Player {
   contractUntil: String!
   marketValue: String!
   team: Team!
+  matches: [Match!]!
 }
+
+enum PlayerMatchStatus {
+  PLAYED
+  ON_THE_BENCH
+  NOT_IN_SQUAD
+  INJURIED
+}
+
+# union MatchInfo = PlayerMatchData | PlayerMatchStatus
+
+type Match {
+  id: ID! @unique
+  day: Int!
+  # homeTeam: Team! @relation(name: "MatchTeam")
+  # homeTeam: Team!
+  homeTeamRanking: String!
+  # awayTeam: Team!
+  awayTeamRanking: String!
+  result: String!
+  playerStatus: PlayerMatchStatus!
+}
+
+# type PlayerMatchData {
+#   id: ID! @unique
+#   position: String!
+#   goals: Int!
+#   assists: Int!
+#   ownGoals: Int!
+#   yellowCards: Boolean!
+#   secondYelows: Boolean!
+#   redCards: Boolean!
+#   substitutedOn: Int!;
+#   substitutedOff: Int!;
+#   minutesPlayed: Int!;
+# }
