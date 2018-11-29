@@ -7,6 +7,7 @@ type Competition {
   id: ID! @unique
   name: String! @unique
   teams: [Team!]!
+  matches: [Match!]!
 }
 
 type Team {
@@ -22,6 +23,8 @@ type Team {
   averageMarketValue: String!
   league: Competition!
   players: [Player!]!
+  homeMatches: [Match!]! @relation(name: "HomeMatches")
+  awayMatches: [Match!]! @relation(name: "AwayMatches")
 }
 
 type Player {
@@ -44,36 +47,47 @@ type Player {
 }
 
 enum PlayerMatchStatus {
-  PLAYED
   ON_THE_BENCH
   NOT_IN_SQUAD
-  INJURIED
+  SECOND_TEAM
+  WITH_U21
+  RED_CARD_SUSPENSION
+  NO_INFORMATION
+  INJURED
+  PLAYED
+  INTERNATIONAL
+  INDIRECT_SUSPENSION
+  YELLOW_CARD_SUSPENSION
+  NO_ELIGIBLE
 }
-
-# union MatchInfo = PlayerMatchData | PlayerMatchStatus
 
 type Match {
   id: ID! @unique
   day: Int!
-  # homeTeam: Team! @relation(name: "MatchTeam")
-  # homeTeam: Team!
-  homeTeamRanking: String!
-  # awayTeam: Team!
-  awayTeamRanking: String!
+  homeTeam: Team! @relation(name: "HomeMatches")
+  homeTeamRanking: Int!
+  awayTeam: Team! @relation(name: "AwayMatches")
+  awayTeamRanking: Int!
   result: String!
   playerStatus: PlayerMatchStatus!
+  stats: PlayerMatchData
+  player: Player!
+  # players: [Player!]! @relation(name: "PlayerStats")
 }
 
-# type PlayerMatchData {
-#   id: ID! @unique
-#   position: String!
-#   goals: Int!
-#   assists: Int!
-#   ownGoals: Int!
-#   yellowCards: Boolean!
-#   secondYelows: Boolean!
-#   redCards: Boolean!
-#   substitutedOn: Int!;
-#   substitutedOff: Int!;
-#   minutesPlayed: Int!;
-# }
+type PlayerMatchData {
+  id: ID! @unique
+  position: String!
+  goals: Int!
+  assists: Int!
+  ownGoals: Int!
+  yellowCards: Boolean!
+  secondYellows: Boolean!
+  redCards: Boolean!
+  substitutedOn: Int!
+  substitutedOff: Int!
+  minutesPlayed: Int!
+  match: Match!
+  player: Player!
+  # player: Player! @relation(name: "PlayerStats")
+}

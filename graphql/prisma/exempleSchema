@@ -1,0 +1,79 @@
+competitions {
+	id
+	name
+	teams [
+		{
+			id
+			name
+			shortName
+			slugName
+			originId
+			squad
+			age
+			foreigners
+			totalMarketValue
+			averageMarketValue
+			league {
+				// same as competitions
+			}
+			players [
+				{
+					id
+					shirtNumber
+					firstName
+					lastName
+					slugName
+					originId
+					mainPosition
+					dateOfBirth
+					age
+					height
+					foot
+					joined
+					contractUntil
+					marketValue
+					team {
+						// same as team
+					}
+					matches [
+						{
+							id
+							day
+							homeTeam
+							homeTeamRanking
+							awayTeam
+							awayTeamRanking
+							result
+							playerStatus = PLAYED | ON_THE_BENCH | NOT_IN_SQUAD | INJURIED
+							stats = NULL | PlayerMatchData {
+								id
+								position
+								goals
+								assists
+								ownGoals
+								yellowCards
+								secondYelows
+								redCards
+								substitutedOn
+								substitutedOff
+								minutesPlayed
+								match {
+									same as match
+								}
+								player {
+									// same as player
+								}
+							}
+						},
+						...
+					]
+				},
+				...
+			]
+			homeMatches
+			awayMatches
+		},
+		...
+	]
+	matches
+}

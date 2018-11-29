@@ -2,7 +2,15 @@ export const typeDefs = /* GraphQL */ `type AggregateCompetition {
   count: Int!
 }
 
+type AggregateMatch {
+  count: Int!
+}
+
 type AggregatePlayer {
+  count: Int!
+}
+
+type AggregatePlayerMatchData {
   count: Int!
 }
 
@@ -22,6 +30,7 @@ type Competition {
   id: ID!
   name: String!
   teams(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Team!]
+  matches(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match!]
 }
 
 type CompetitionConnection {
@@ -33,6 +42,7 @@ type CompetitionConnection {
 input CompetitionCreateInput {
   name: String!
   teams: TeamCreateManyWithoutLeagueInput
+  matches: MatchCreateManyInput
 }
 
 input CompetitionCreateOneWithoutTeamsInput {
@@ -42,6 +52,7 @@ input CompetitionCreateOneWithoutTeamsInput {
 
 input CompetitionCreateWithoutTeamsInput {
   name: String!
+  matches: MatchCreateManyInput
 }
 
 type CompetitionEdge {
@@ -86,6 +97,7 @@ input CompetitionSubscriptionWhereInput {
 input CompetitionUpdateInput {
   name: String
   teams: TeamUpdateManyWithoutLeagueInput
+  matches: MatchUpdateManyInput
 }
 
 input CompetitionUpdateManyMutationInput {
@@ -101,6 +113,7 @@ input CompetitionUpdateOneRequiredWithoutTeamsInput {
 
 input CompetitionUpdateWithoutTeamsDataInput {
   name: String
+  matches: MatchUpdateManyInput
 }
 
 input CompetitionUpsertWithoutTeamsInput {
@@ -140,6 +153,9 @@ input CompetitionWhereInput {
   teams_every: TeamWhereInput
   teams_some: TeamWhereInput
   teams_none: TeamWhereInput
+  matches_every: MatchWhereInput
+  matches_some: MatchWhereInput
+  matches_none: MatchWhereInput
   AND: [CompetitionWhereInput!]
   OR: [CompetitionWhereInput!]
   NOT: [CompetitionWhereInput!]
@@ -152,6 +168,395 @@ input CompetitionWhereUniqueInput {
 
 scalar Long
 
+type Match {
+  id: ID!
+  day: Int!
+  homeTeam: Team!
+  homeTeamRanking: Int!
+  awayTeam: Team!
+  awayTeamRanking: Int!
+  result: String!
+  playerStatus: PlayerMatchStatus!
+  stats: PlayerMatchData
+  player: Player!
+}
+
+type MatchConnection {
+  pageInfo: PageInfo!
+  edges: [MatchEdge]!
+  aggregate: AggregateMatch!
+}
+
+input MatchCreateInput {
+  day: Int!
+  homeTeam: TeamCreateOneWithoutHomeMatchesInput!
+  homeTeamRanking: Int!
+  awayTeam: TeamCreateOneWithoutAwayMatchesInput!
+  awayTeamRanking: Int!
+  result: String!
+  playerStatus: PlayerMatchStatus!
+  stats: PlayerMatchDataCreateOneWithoutMatchInput
+  player: PlayerCreateOneWithoutMatchesInput!
+}
+
+input MatchCreateManyInput {
+  create: [MatchCreateInput!]
+  connect: [MatchWhereUniqueInput!]
+}
+
+input MatchCreateManyWithoutAwayTeamInput {
+  create: [MatchCreateWithoutAwayTeamInput!]
+  connect: [MatchWhereUniqueInput!]
+}
+
+input MatchCreateManyWithoutHomeTeamInput {
+  create: [MatchCreateWithoutHomeTeamInput!]
+  connect: [MatchWhereUniqueInput!]
+}
+
+input MatchCreateManyWithoutPlayerInput {
+  create: [MatchCreateWithoutPlayerInput!]
+  connect: [MatchWhereUniqueInput!]
+}
+
+input MatchCreateOneWithoutStatsInput {
+  create: MatchCreateWithoutStatsInput
+  connect: MatchWhereUniqueInput
+}
+
+input MatchCreateWithoutAwayTeamInput {
+  day: Int!
+  homeTeam: TeamCreateOneWithoutHomeMatchesInput!
+  homeTeamRanking: Int!
+  awayTeamRanking: Int!
+  result: String!
+  playerStatus: PlayerMatchStatus!
+  stats: PlayerMatchDataCreateOneWithoutMatchInput
+  player: PlayerCreateOneWithoutMatchesInput!
+}
+
+input MatchCreateWithoutHomeTeamInput {
+  day: Int!
+  homeTeamRanking: Int!
+  awayTeam: TeamCreateOneWithoutAwayMatchesInput!
+  awayTeamRanking: Int!
+  result: String!
+  playerStatus: PlayerMatchStatus!
+  stats: PlayerMatchDataCreateOneWithoutMatchInput
+  player: PlayerCreateOneWithoutMatchesInput!
+}
+
+input MatchCreateWithoutPlayerInput {
+  day: Int!
+  homeTeam: TeamCreateOneWithoutHomeMatchesInput!
+  homeTeamRanking: Int!
+  awayTeam: TeamCreateOneWithoutAwayMatchesInput!
+  awayTeamRanking: Int!
+  result: String!
+  playerStatus: PlayerMatchStatus!
+  stats: PlayerMatchDataCreateOneWithoutMatchInput
+}
+
+input MatchCreateWithoutStatsInput {
+  day: Int!
+  homeTeam: TeamCreateOneWithoutHomeMatchesInput!
+  homeTeamRanking: Int!
+  awayTeam: TeamCreateOneWithoutAwayMatchesInput!
+  awayTeamRanking: Int!
+  result: String!
+  playerStatus: PlayerMatchStatus!
+  player: PlayerCreateOneWithoutMatchesInput!
+}
+
+type MatchEdge {
+  node: Match!
+  cursor: String!
+}
+
+enum MatchOrderByInput {
+  id_ASC
+  id_DESC
+  day_ASC
+  day_DESC
+  homeTeamRanking_ASC
+  homeTeamRanking_DESC
+  awayTeamRanking_ASC
+  awayTeamRanking_DESC
+  result_ASC
+  result_DESC
+  playerStatus_ASC
+  playerStatus_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type MatchPreviousValues {
+  id: ID!
+  day: Int!
+  homeTeamRanking: Int!
+  awayTeamRanking: Int!
+  result: String!
+  playerStatus: PlayerMatchStatus!
+}
+
+type MatchSubscriptionPayload {
+  mutation: MutationType!
+  node: Match
+  updatedFields: [String!]
+  previousValues: MatchPreviousValues
+}
+
+input MatchSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: MatchWhereInput
+  AND: [MatchSubscriptionWhereInput!]
+  OR: [MatchSubscriptionWhereInput!]
+  NOT: [MatchSubscriptionWhereInput!]
+}
+
+input MatchUpdateDataInput {
+  day: Int
+  homeTeam: TeamUpdateOneRequiredWithoutHomeMatchesInput
+  homeTeamRanking: Int
+  awayTeam: TeamUpdateOneRequiredWithoutAwayMatchesInput
+  awayTeamRanking: Int
+  result: String
+  playerStatus: PlayerMatchStatus
+  stats: PlayerMatchDataUpdateOneWithoutMatchInput
+  player: PlayerUpdateOneRequiredWithoutMatchesInput
+}
+
+input MatchUpdateInput {
+  day: Int
+  homeTeam: TeamUpdateOneRequiredWithoutHomeMatchesInput
+  homeTeamRanking: Int
+  awayTeam: TeamUpdateOneRequiredWithoutAwayMatchesInput
+  awayTeamRanking: Int
+  result: String
+  playerStatus: PlayerMatchStatus
+  stats: PlayerMatchDataUpdateOneWithoutMatchInput
+  player: PlayerUpdateOneRequiredWithoutMatchesInput
+}
+
+input MatchUpdateManyInput {
+  create: [MatchCreateInput!]
+  update: [MatchUpdateWithWhereUniqueNestedInput!]
+  upsert: [MatchUpsertWithWhereUniqueNestedInput!]
+  delete: [MatchWhereUniqueInput!]
+  connect: [MatchWhereUniqueInput!]
+  disconnect: [MatchWhereUniqueInput!]
+}
+
+input MatchUpdateManyMutationInput {
+  day: Int
+  homeTeamRanking: Int
+  awayTeamRanking: Int
+  result: String
+  playerStatus: PlayerMatchStatus
+}
+
+input MatchUpdateManyWithoutAwayTeamInput {
+  create: [MatchCreateWithoutAwayTeamInput!]
+  delete: [MatchWhereUniqueInput!]
+  connect: [MatchWhereUniqueInput!]
+  disconnect: [MatchWhereUniqueInput!]
+  update: [MatchUpdateWithWhereUniqueWithoutAwayTeamInput!]
+  upsert: [MatchUpsertWithWhereUniqueWithoutAwayTeamInput!]
+}
+
+input MatchUpdateManyWithoutHomeTeamInput {
+  create: [MatchCreateWithoutHomeTeamInput!]
+  delete: [MatchWhereUniqueInput!]
+  connect: [MatchWhereUniqueInput!]
+  disconnect: [MatchWhereUniqueInput!]
+  update: [MatchUpdateWithWhereUniqueWithoutHomeTeamInput!]
+  upsert: [MatchUpsertWithWhereUniqueWithoutHomeTeamInput!]
+}
+
+input MatchUpdateManyWithoutPlayerInput {
+  create: [MatchCreateWithoutPlayerInput!]
+  delete: [MatchWhereUniqueInput!]
+  connect: [MatchWhereUniqueInput!]
+  disconnect: [MatchWhereUniqueInput!]
+  update: [MatchUpdateWithWhereUniqueWithoutPlayerInput!]
+  upsert: [MatchUpsertWithWhereUniqueWithoutPlayerInput!]
+}
+
+input MatchUpdateOneRequiredWithoutStatsInput {
+  create: MatchCreateWithoutStatsInput
+  update: MatchUpdateWithoutStatsDataInput
+  upsert: MatchUpsertWithoutStatsInput
+  connect: MatchWhereUniqueInput
+}
+
+input MatchUpdateWithoutAwayTeamDataInput {
+  day: Int
+  homeTeam: TeamUpdateOneRequiredWithoutHomeMatchesInput
+  homeTeamRanking: Int
+  awayTeamRanking: Int
+  result: String
+  playerStatus: PlayerMatchStatus
+  stats: PlayerMatchDataUpdateOneWithoutMatchInput
+  player: PlayerUpdateOneRequiredWithoutMatchesInput
+}
+
+input MatchUpdateWithoutHomeTeamDataInput {
+  day: Int
+  homeTeamRanking: Int
+  awayTeam: TeamUpdateOneRequiredWithoutAwayMatchesInput
+  awayTeamRanking: Int
+  result: String
+  playerStatus: PlayerMatchStatus
+  stats: PlayerMatchDataUpdateOneWithoutMatchInput
+  player: PlayerUpdateOneRequiredWithoutMatchesInput
+}
+
+input MatchUpdateWithoutPlayerDataInput {
+  day: Int
+  homeTeam: TeamUpdateOneRequiredWithoutHomeMatchesInput
+  homeTeamRanking: Int
+  awayTeam: TeamUpdateOneRequiredWithoutAwayMatchesInput
+  awayTeamRanking: Int
+  result: String
+  playerStatus: PlayerMatchStatus
+  stats: PlayerMatchDataUpdateOneWithoutMatchInput
+}
+
+input MatchUpdateWithoutStatsDataInput {
+  day: Int
+  homeTeam: TeamUpdateOneRequiredWithoutHomeMatchesInput
+  homeTeamRanking: Int
+  awayTeam: TeamUpdateOneRequiredWithoutAwayMatchesInput
+  awayTeamRanking: Int
+  result: String
+  playerStatus: PlayerMatchStatus
+  player: PlayerUpdateOneRequiredWithoutMatchesInput
+}
+
+input MatchUpdateWithWhereUniqueNestedInput {
+  where: MatchWhereUniqueInput!
+  data: MatchUpdateDataInput!
+}
+
+input MatchUpdateWithWhereUniqueWithoutAwayTeamInput {
+  where: MatchWhereUniqueInput!
+  data: MatchUpdateWithoutAwayTeamDataInput!
+}
+
+input MatchUpdateWithWhereUniqueWithoutHomeTeamInput {
+  where: MatchWhereUniqueInput!
+  data: MatchUpdateWithoutHomeTeamDataInput!
+}
+
+input MatchUpdateWithWhereUniqueWithoutPlayerInput {
+  where: MatchWhereUniqueInput!
+  data: MatchUpdateWithoutPlayerDataInput!
+}
+
+input MatchUpsertWithoutStatsInput {
+  update: MatchUpdateWithoutStatsDataInput!
+  create: MatchCreateWithoutStatsInput!
+}
+
+input MatchUpsertWithWhereUniqueNestedInput {
+  where: MatchWhereUniqueInput!
+  update: MatchUpdateDataInput!
+  create: MatchCreateInput!
+}
+
+input MatchUpsertWithWhereUniqueWithoutAwayTeamInput {
+  where: MatchWhereUniqueInput!
+  update: MatchUpdateWithoutAwayTeamDataInput!
+  create: MatchCreateWithoutAwayTeamInput!
+}
+
+input MatchUpsertWithWhereUniqueWithoutHomeTeamInput {
+  where: MatchWhereUniqueInput!
+  update: MatchUpdateWithoutHomeTeamDataInput!
+  create: MatchCreateWithoutHomeTeamInput!
+}
+
+input MatchUpsertWithWhereUniqueWithoutPlayerInput {
+  where: MatchWhereUniqueInput!
+  update: MatchUpdateWithoutPlayerDataInput!
+  create: MatchCreateWithoutPlayerInput!
+}
+
+input MatchWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  day: Int
+  day_not: Int
+  day_in: [Int!]
+  day_not_in: [Int!]
+  day_lt: Int
+  day_lte: Int
+  day_gt: Int
+  day_gte: Int
+  homeTeam: TeamWhereInput
+  homeTeamRanking: Int
+  homeTeamRanking_not: Int
+  homeTeamRanking_in: [Int!]
+  homeTeamRanking_not_in: [Int!]
+  homeTeamRanking_lt: Int
+  homeTeamRanking_lte: Int
+  homeTeamRanking_gt: Int
+  homeTeamRanking_gte: Int
+  awayTeam: TeamWhereInput
+  awayTeamRanking: Int
+  awayTeamRanking_not: Int
+  awayTeamRanking_in: [Int!]
+  awayTeamRanking_not_in: [Int!]
+  awayTeamRanking_lt: Int
+  awayTeamRanking_lte: Int
+  awayTeamRanking_gt: Int
+  awayTeamRanking_gte: Int
+  result: String
+  result_not: String
+  result_in: [String!]
+  result_not_in: [String!]
+  result_lt: String
+  result_lte: String
+  result_gt: String
+  result_gte: String
+  result_contains: String
+  result_not_contains: String
+  result_starts_with: String
+  result_not_starts_with: String
+  result_ends_with: String
+  result_not_ends_with: String
+  playerStatus: PlayerMatchStatus
+  playerStatus_not: PlayerMatchStatus
+  playerStatus_in: [PlayerMatchStatus!]
+  playerStatus_not_in: [PlayerMatchStatus!]
+  stats: PlayerMatchDataWhereInput
+  player: PlayerWhereInput
+  AND: [MatchWhereInput!]
+  OR: [MatchWhereInput!]
+  NOT: [MatchWhereInput!]
+}
+
+input MatchWhereUniqueInput {
+  id: ID
+}
+
 type Mutation {
   createCompetition(data: CompetitionCreateInput!): Competition!
   updateCompetition(data: CompetitionUpdateInput!, where: CompetitionWhereUniqueInput!): Competition
@@ -159,12 +564,24 @@ type Mutation {
   upsertCompetition(where: CompetitionWhereUniqueInput!, create: CompetitionCreateInput!, update: CompetitionUpdateInput!): Competition!
   deleteCompetition(where: CompetitionWhereUniqueInput!): Competition
   deleteManyCompetitions(where: CompetitionWhereInput): BatchPayload!
+  createMatch(data: MatchCreateInput!): Match!
+  updateMatch(data: MatchUpdateInput!, where: MatchWhereUniqueInput!): Match
+  updateManyMatches(data: MatchUpdateManyMutationInput!, where: MatchWhereInput): BatchPayload!
+  upsertMatch(where: MatchWhereUniqueInput!, create: MatchCreateInput!, update: MatchUpdateInput!): Match!
+  deleteMatch(where: MatchWhereUniqueInput!): Match
+  deleteManyMatches(where: MatchWhereInput): BatchPayload!
   createPlayer(data: PlayerCreateInput!): Player!
   updatePlayer(data: PlayerUpdateInput!, where: PlayerWhereUniqueInput!): Player
   updateManyPlayers(data: PlayerUpdateManyMutationInput!, where: PlayerWhereInput): BatchPayload!
   upsertPlayer(where: PlayerWhereUniqueInput!, create: PlayerCreateInput!, update: PlayerUpdateInput!): Player!
   deletePlayer(where: PlayerWhereUniqueInput!): Player
   deleteManyPlayers(where: PlayerWhereInput): BatchPayload!
+  createPlayerMatchData(data: PlayerMatchDataCreateInput!): PlayerMatchData!
+  updatePlayerMatchData(data: PlayerMatchDataUpdateInput!, where: PlayerMatchDataWhereUniqueInput!): PlayerMatchData
+  updateManyPlayerMatchDatas(data: PlayerMatchDataUpdateManyMutationInput!, where: PlayerMatchDataWhereInput): BatchPayload!
+  upsertPlayerMatchData(where: PlayerMatchDataWhereUniqueInput!, create: PlayerMatchDataCreateInput!, update: PlayerMatchDataUpdateInput!): PlayerMatchData!
+  deletePlayerMatchData(where: PlayerMatchDataWhereUniqueInput!): PlayerMatchData
+  deleteManyPlayerMatchDatas(where: PlayerMatchDataWhereInput): BatchPayload!
   createTeam(data: TeamCreateInput!): Team!
   updateTeam(data: TeamUpdateInput!, where: TeamWhereUniqueInput!): Team
   updateManyTeams(data: TeamUpdateManyMutationInput!, where: TeamWhereInput): BatchPayload!
@@ -212,6 +629,7 @@ type Player {
   contractUntil: String!
   marketValue: String!
   team: Team!
+  matches(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match!]
 }
 
 type PlayerConnection {
@@ -235,11 +653,39 @@ input PlayerCreateInput {
   contractUntil: String!
   marketValue: String!
   team: TeamCreateOneWithoutPlayersInput!
+  matches: MatchCreateManyWithoutPlayerInput
 }
 
 input PlayerCreateManyWithoutTeamInput {
   create: [PlayerCreateWithoutTeamInput!]
   connect: [PlayerWhereUniqueInput!]
+}
+
+input PlayerCreateOneInput {
+  create: PlayerCreateInput
+  connect: PlayerWhereUniqueInput
+}
+
+input PlayerCreateOneWithoutMatchesInput {
+  create: PlayerCreateWithoutMatchesInput
+  connect: PlayerWhereUniqueInput
+}
+
+input PlayerCreateWithoutMatchesInput {
+  shirtNumber: Int!
+  firstName: String!
+  lastName: String!
+  slugName: String!
+  originId: Int!
+  mainPosition: String!
+  dateOfBirth: String!
+  age: Int!
+  height: String!
+  foot: String!
+  joined: String!
+  contractUntil: String!
+  marketValue: String!
+  team: TeamCreateOneWithoutPlayersInput!
 }
 
 input PlayerCreateWithoutTeamInput {
@@ -256,11 +702,299 @@ input PlayerCreateWithoutTeamInput {
   joined: String!
   contractUntil: String!
   marketValue: String!
+  matches: MatchCreateManyWithoutPlayerInput
 }
 
 type PlayerEdge {
   node: Player!
   cursor: String!
+}
+
+type PlayerMatchData {
+  id: ID!
+  position: String!
+  goals: Int!
+  assists: Int!
+  ownGoals: Int!
+  yellowCards: Boolean!
+  secondYellows: Boolean!
+  redCards: Boolean!
+  substitutedOn: Int!
+  substitutedOff: Int!
+  minutesPlayed: Int!
+  match: Match!
+  player: Player!
+}
+
+type PlayerMatchDataConnection {
+  pageInfo: PageInfo!
+  edges: [PlayerMatchDataEdge]!
+  aggregate: AggregatePlayerMatchData!
+}
+
+input PlayerMatchDataCreateInput {
+  position: String!
+  goals: Int!
+  assists: Int!
+  ownGoals: Int!
+  yellowCards: Boolean!
+  secondYellows: Boolean!
+  redCards: Boolean!
+  substitutedOn: Int!
+  substitutedOff: Int!
+  minutesPlayed: Int!
+  match: MatchCreateOneWithoutStatsInput!
+  player: PlayerCreateOneInput!
+}
+
+input PlayerMatchDataCreateOneWithoutMatchInput {
+  create: PlayerMatchDataCreateWithoutMatchInput
+  connect: PlayerMatchDataWhereUniqueInput
+}
+
+input PlayerMatchDataCreateWithoutMatchInput {
+  position: String!
+  goals: Int!
+  assists: Int!
+  ownGoals: Int!
+  yellowCards: Boolean!
+  secondYellows: Boolean!
+  redCards: Boolean!
+  substitutedOn: Int!
+  substitutedOff: Int!
+  minutesPlayed: Int!
+  player: PlayerCreateOneInput!
+}
+
+type PlayerMatchDataEdge {
+  node: PlayerMatchData!
+  cursor: String!
+}
+
+enum PlayerMatchDataOrderByInput {
+  id_ASC
+  id_DESC
+  position_ASC
+  position_DESC
+  goals_ASC
+  goals_DESC
+  assists_ASC
+  assists_DESC
+  ownGoals_ASC
+  ownGoals_DESC
+  yellowCards_ASC
+  yellowCards_DESC
+  secondYellows_ASC
+  secondYellows_DESC
+  redCards_ASC
+  redCards_DESC
+  substitutedOn_ASC
+  substitutedOn_DESC
+  substitutedOff_ASC
+  substitutedOff_DESC
+  minutesPlayed_ASC
+  minutesPlayed_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PlayerMatchDataPreviousValues {
+  id: ID!
+  position: String!
+  goals: Int!
+  assists: Int!
+  ownGoals: Int!
+  yellowCards: Boolean!
+  secondYellows: Boolean!
+  redCards: Boolean!
+  substitutedOn: Int!
+  substitutedOff: Int!
+  minutesPlayed: Int!
+}
+
+type PlayerMatchDataSubscriptionPayload {
+  mutation: MutationType!
+  node: PlayerMatchData
+  updatedFields: [String!]
+  previousValues: PlayerMatchDataPreviousValues
+}
+
+input PlayerMatchDataSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PlayerMatchDataWhereInput
+  AND: [PlayerMatchDataSubscriptionWhereInput!]
+  OR: [PlayerMatchDataSubscriptionWhereInput!]
+  NOT: [PlayerMatchDataSubscriptionWhereInput!]
+}
+
+input PlayerMatchDataUpdateInput {
+  position: String
+  goals: Int
+  assists: Int
+  ownGoals: Int
+  yellowCards: Boolean
+  secondYellows: Boolean
+  redCards: Boolean
+  substitutedOn: Int
+  substitutedOff: Int
+  minutesPlayed: Int
+  match: MatchUpdateOneRequiredWithoutStatsInput
+  player: PlayerUpdateOneRequiredInput
+}
+
+input PlayerMatchDataUpdateManyMutationInput {
+  position: String
+  goals: Int
+  assists: Int
+  ownGoals: Int
+  yellowCards: Boolean
+  secondYellows: Boolean
+  redCards: Boolean
+  substitutedOn: Int
+  substitutedOff: Int
+  minutesPlayed: Int
+}
+
+input PlayerMatchDataUpdateOneWithoutMatchInput {
+  create: PlayerMatchDataCreateWithoutMatchInput
+  update: PlayerMatchDataUpdateWithoutMatchDataInput
+  upsert: PlayerMatchDataUpsertWithoutMatchInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: PlayerMatchDataWhereUniqueInput
+}
+
+input PlayerMatchDataUpdateWithoutMatchDataInput {
+  position: String
+  goals: Int
+  assists: Int
+  ownGoals: Int
+  yellowCards: Boolean
+  secondYellows: Boolean
+  redCards: Boolean
+  substitutedOn: Int
+  substitutedOff: Int
+  minutesPlayed: Int
+  player: PlayerUpdateOneRequiredInput
+}
+
+input PlayerMatchDataUpsertWithoutMatchInput {
+  update: PlayerMatchDataUpdateWithoutMatchDataInput!
+  create: PlayerMatchDataCreateWithoutMatchInput!
+}
+
+input PlayerMatchDataWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  position: String
+  position_not: String
+  position_in: [String!]
+  position_not_in: [String!]
+  position_lt: String
+  position_lte: String
+  position_gt: String
+  position_gte: String
+  position_contains: String
+  position_not_contains: String
+  position_starts_with: String
+  position_not_starts_with: String
+  position_ends_with: String
+  position_not_ends_with: String
+  goals: Int
+  goals_not: Int
+  goals_in: [Int!]
+  goals_not_in: [Int!]
+  goals_lt: Int
+  goals_lte: Int
+  goals_gt: Int
+  goals_gte: Int
+  assists: Int
+  assists_not: Int
+  assists_in: [Int!]
+  assists_not_in: [Int!]
+  assists_lt: Int
+  assists_lte: Int
+  assists_gt: Int
+  assists_gte: Int
+  ownGoals: Int
+  ownGoals_not: Int
+  ownGoals_in: [Int!]
+  ownGoals_not_in: [Int!]
+  ownGoals_lt: Int
+  ownGoals_lte: Int
+  ownGoals_gt: Int
+  ownGoals_gte: Int
+  yellowCards: Boolean
+  yellowCards_not: Boolean
+  secondYellows: Boolean
+  secondYellows_not: Boolean
+  redCards: Boolean
+  redCards_not: Boolean
+  substitutedOn: Int
+  substitutedOn_not: Int
+  substitutedOn_in: [Int!]
+  substitutedOn_not_in: [Int!]
+  substitutedOn_lt: Int
+  substitutedOn_lte: Int
+  substitutedOn_gt: Int
+  substitutedOn_gte: Int
+  substitutedOff: Int
+  substitutedOff_not: Int
+  substitutedOff_in: [Int!]
+  substitutedOff_not_in: [Int!]
+  substitutedOff_lt: Int
+  substitutedOff_lte: Int
+  substitutedOff_gt: Int
+  substitutedOff_gte: Int
+  minutesPlayed: Int
+  minutesPlayed_not: Int
+  minutesPlayed_in: [Int!]
+  minutesPlayed_not_in: [Int!]
+  minutesPlayed_lt: Int
+  minutesPlayed_lte: Int
+  minutesPlayed_gt: Int
+  minutesPlayed_gte: Int
+  match: MatchWhereInput
+  player: PlayerWhereInput
+  AND: [PlayerMatchDataWhereInput!]
+  OR: [PlayerMatchDataWhereInput!]
+  NOT: [PlayerMatchDataWhereInput!]
+}
+
+input PlayerMatchDataWhereUniqueInput {
+  id: ID
+}
+
+enum PlayerMatchStatus {
+  ON_THE_BENCH
+  NOT_IN_SQUAD
+  SECOND_TEAM
+  WITH_U21
+  RED_CARD_SUSPENSION
+  NO_INFORMATION
+  INJURED
+  PLAYED
+  INTERNATIONAL
+  INDIRECT_SUSPENSION
+  YELLOW_CARD_SUSPENSION
+  NO_ELIGIBLE
 }
 
 enum PlayerOrderByInput {
@@ -333,6 +1067,24 @@ input PlayerSubscriptionWhereInput {
   NOT: [PlayerSubscriptionWhereInput!]
 }
 
+input PlayerUpdateDataInput {
+  shirtNumber: Int
+  firstName: String
+  lastName: String
+  slugName: String
+  originId: Int
+  mainPosition: String
+  dateOfBirth: String
+  age: Int
+  height: String
+  foot: String
+  joined: String
+  contractUntil: String
+  marketValue: String
+  team: TeamUpdateOneRequiredWithoutPlayersInput
+  matches: MatchUpdateManyWithoutPlayerInput
+}
+
 input PlayerUpdateInput {
   shirtNumber: Int
   firstName: String
@@ -348,6 +1100,7 @@ input PlayerUpdateInput {
   contractUntil: String
   marketValue: String
   team: TeamUpdateOneRequiredWithoutPlayersInput
+  matches: MatchUpdateManyWithoutPlayerInput
 }
 
 input PlayerUpdateManyMutationInput {
@@ -375,6 +1128,37 @@ input PlayerUpdateManyWithoutTeamInput {
   upsert: [PlayerUpsertWithWhereUniqueWithoutTeamInput!]
 }
 
+input PlayerUpdateOneRequiredInput {
+  create: PlayerCreateInput
+  update: PlayerUpdateDataInput
+  upsert: PlayerUpsertNestedInput
+  connect: PlayerWhereUniqueInput
+}
+
+input PlayerUpdateOneRequiredWithoutMatchesInput {
+  create: PlayerCreateWithoutMatchesInput
+  update: PlayerUpdateWithoutMatchesDataInput
+  upsert: PlayerUpsertWithoutMatchesInput
+  connect: PlayerWhereUniqueInput
+}
+
+input PlayerUpdateWithoutMatchesDataInput {
+  shirtNumber: Int
+  firstName: String
+  lastName: String
+  slugName: String
+  originId: Int
+  mainPosition: String
+  dateOfBirth: String
+  age: Int
+  height: String
+  foot: String
+  joined: String
+  contractUntil: String
+  marketValue: String
+  team: TeamUpdateOneRequiredWithoutPlayersInput
+}
+
 input PlayerUpdateWithoutTeamDataInput {
   shirtNumber: Int
   firstName: String
@@ -389,11 +1173,22 @@ input PlayerUpdateWithoutTeamDataInput {
   joined: String
   contractUntil: String
   marketValue: String
+  matches: MatchUpdateManyWithoutPlayerInput
 }
 
 input PlayerUpdateWithWhereUniqueWithoutTeamInput {
   where: PlayerWhereUniqueInput!
   data: PlayerUpdateWithoutTeamDataInput!
+}
+
+input PlayerUpsertNestedInput {
+  update: PlayerUpdateDataInput!
+  create: PlayerCreateInput!
+}
+
+input PlayerUpsertWithoutMatchesInput {
+  update: PlayerUpdateWithoutMatchesDataInput!
+  create: PlayerCreateWithoutMatchesInput!
 }
 
 input PlayerUpsertWithWhereUniqueWithoutTeamInput {
@@ -582,6 +1377,9 @@ input PlayerWhereInput {
   marketValue_ends_with: String
   marketValue_not_ends_with: String
   team: TeamWhereInput
+  matches_every: MatchWhereInput
+  matches_some: MatchWhereInput
+  matches_none: MatchWhereInput
   AND: [PlayerWhereInput!]
   OR: [PlayerWhereInput!]
   NOT: [PlayerWhereInput!]
@@ -596,9 +1394,15 @@ type Query {
   competition(where: CompetitionWhereUniqueInput!): Competition
   competitions(where: CompetitionWhereInput, orderBy: CompetitionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Competition]!
   competitionsConnection(where: CompetitionWhereInput, orderBy: CompetitionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CompetitionConnection!
+  match(where: MatchWhereUniqueInput!): Match
+  matches(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match]!
+  matchesConnection(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MatchConnection!
   player(where: PlayerWhereUniqueInput!): Player
   players(where: PlayerWhereInput, orderBy: PlayerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Player]!
   playersConnection(where: PlayerWhereInput, orderBy: PlayerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PlayerConnection!
+  playerMatchData(where: PlayerMatchDataWhereUniqueInput!): PlayerMatchData
+  playerMatchDatas(where: PlayerMatchDataWhereInput, orderBy: PlayerMatchDataOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PlayerMatchData]!
+  playerMatchDatasConnection(where: PlayerMatchDataWhereInput, orderBy: PlayerMatchDataOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PlayerMatchDataConnection!
   team(where: TeamWhereUniqueInput!): Team
   teams(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Team]!
   teamsConnection(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TeamConnection!
@@ -610,7 +1414,9 @@ type Query {
 
 type Subscription {
   competition(where: CompetitionSubscriptionWhereInput): CompetitionSubscriptionPayload
+  match(where: MatchSubscriptionWhereInput): MatchSubscriptionPayload
   player(where: PlayerSubscriptionWhereInput): PlayerSubscriptionPayload
+  playerMatchData(where: PlayerMatchDataSubscriptionWhereInput): PlayerMatchDataSubscriptionPayload
   team(where: TeamSubscriptionWhereInput): TeamSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
@@ -628,6 +1434,8 @@ type Team {
   averageMarketValue: String!
   league: Competition!
   players(where: PlayerWhereInput, orderBy: PlayerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Player!]
+  homeMatches(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match!]
+  awayMatches(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match!]
 }
 
 type TeamConnection {
@@ -648,6 +1456,8 @@ input TeamCreateInput {
   averageMarketValue: String!
   league: CompetitionCreateOneWithoutTeamsInput!
   players: PlayerCreateManyWithoutTeamInput
+  homeMatches: MatchCreateManyWithoutHomeTeamInput
+  awayMatches: MatchCreateManyWithoutAwayTeamInput
 }
 
 input TeamCreateManyWithoutLeagueInput {
@@ -655,9 +1465,49 @@ input TeamCreateManyWithoutLeagueInput {
   connect: [TeamWhereUniqueInput!]
 }
 
+input TeamCreateOneWithoutAwayMatchesInput {
+  create: TeamCreateWithoutAwayMatchesInput
+  connect: TeamWhereUniqueInput
+}
+
+input TeamCreateOneWithoutHomeMatchesInput {
+  create: TeamCreateWithoutHomeMatchesInput
+  connect: TeamWhereUniqueInput
+}
+
 input TeamCreateOneWithoutPlayersInput {
   create: TeamCreateWithoutPlayersInput
   connect: TeamWhereUniqueInput
+}
+
+input TeamCreateWithoutAwayMatchesInput {
+  name: String!
+  shortName: String!
+  slugName: String!
+  originId: Int!
+  squad: Int!
+  age: Float!
+  foreigners: Int!
+  totalMarketValue: String!
+  averageMarketValue: String!
+  league: CompetitionCreateOneWithoutTeamsInput!
+  players: PlayerCreateManyWithoutTeamInput
+  homeMatches: MatchCreateManyWithoutHomeTeamInput
+}
+
+input TeamCreateWithoutHomeMatchesInput {
+  name: String!
+  shortName: String!
+  slugName: String!
+  originId: Int!
+  squad: Int!
+  age: Float!
+  foreigners: Int!
+  totalMarketValue: String!
+  averageMarketValue: String!
+  league: CompetitionCreateOneWithoutTeamsInput!
+  players: PlayerCreateManyWithoutTeamInput
+  awayMatches: MatchCreateManyWithoutAwayTeamInput
 }
 
 input TeamCreateWithoutLeagueInput {
@@ -671,6 +1521,8 @@ input TeamCreateWithoutLeagueInput {
   totalMarketValue: String!
   averageMarketValue: String!
   players: PlayerCreateManyWithoutTeamInput
+  homeMatches: MatchCreateManyWithoutHomeTeamInput
+  awayMatches: MatchCreateManyWithoutAwayTeamInput
 }
 
 input TeamCreateWithoutPlayersInput {
@@ -684,6 +1536,8 @@ input TeamCreateWithoutPlayersInput {
   totalMarketValue: String!
   averageMarketValue: String!
   league: CompetitionCreateOneWithoutTeamsInput!
+  homeMatches: MatchCreateManyWithoutHomeTeamInput
+  awayMatches: MatchCreateManyWithoutAwayTeamInput
 }
 
 type TeamEdge {
@@ -761,6 +1615,8 @@ input TeamUpdateInput {
   averageMarketValue: String
   league: CompetitionUpdateOneRequiredWithoutTeamsInput
   players: PlayerUpdateManyWithoutTeamInput
+  homeMatches: MatchUpdateManyWithoutHomeTeamInput
+  awayMatches: MatchUpdateManyWithoutAwayTeamInput
 }
 
 input TeamUpdateManyMutationInput {
@@ -784,11 +1640,55 @@ input TeamUpdateManyWithoutLeagueInput {
   upsert: [TeamUpsertWithWhereUniqueWithoutLeagueInput!]
 }
 
+input TeamUpdateOneRequiredWithoutAwayMatchesInput {
+  create: TeamCreateWithoutAwayMatchesInput
+  update: TeamUpdateWithoutAwayMatchesDataInput
+  upsert: TeamUpsertWithoutAwayMatchesInput
+  connect: TeamWhereUniqueInput
+}
+
+input TeamUpdateOneRequiredWithoutHomeMatchesInput {
+  create: TeamCreateWithoutHomeMatchesInput
+  update: TeamUpdateWithoutHomeMatchesDataInput
+  upsert: TeamUpsertWithoutHomeMatchesInput
+  connect: TeamWhereUniqueInput
+}
+
 input TeamUpdateOneRequiredWithoutPlayersInput {
   create: TeamCreateWithoutPlayersInput
   update: TeamUpdateWithoutPlayersDataInput
   upsert: TeamUpsertWithoutPlayersInput
   connect: TeamWhereUniqueInput
+}
+
+input TeamUpdateWithoutAwayMatchesDataInput {
+  name: String
+  shortName: String
+  slugName: String
+  originId: Int
+  squad: Int
+  age: Float
+  foreigners: Int
+  totalMarketValue: String
+  averageMarketValue: String
+  league: CompetitionUpdateOneRequiredWithoutTeamsInput
+  players: PlayerUpdateManyWithoutTeamInput
+  homeMatches: MatchUpdateManyWithoutHomeTeamInput
+}
+
+input TeamUpdateWithoutHomeMatchesDataInput {
+  name: String
+  shortName: String
+  slugName: String
+  originId: Int
+  squad: Int
+  age: Float
+  foreigners: Int
+  totalMarketValue: String
+  averageMarketValue: String
+  league: CompetitionUpdateOneRequiredWithoutTeamsInput
+  players: PlayerUpdateManyWithoutTeamInput
+  awayMatches: MatchUpdateManyWithoutAwayTeamInput
 }
 
 input TeamUpdateWithoutLeagueDataInput {
@@ -802,6 +1702,8 @@ input TeamUpdateWithoutLeagueDataInput {
   totalMarketValue: String
   averageMarketValue: String
   players: PlayerUpdateManyWithoutTeamInput
+  homeMatches: MatchUpdateManyWithoutHomeTeamInput
+  awayMatches: MatchUpdateManyWithoutAwayTeamInput
 }
 
 input TeamUpdateWithoutPlayersDataInput {
@@ -815,11 +1717,23 @@ input TeamUpdateWithoutPlayersDataInput {
   totalMarketValue: String
   averageMarketValue: String
   league: CompetitionUpdateOneRequiredWithoutTeamsInput
+  homeMatches: MatchUpdateManyWithoutHomeTeamInput
+  awayMatches: MatchUpdateManyWithoutAwayTeamInput
 }
 
 input TeamUpdateWithWhereUniqueWithoutLeagueInput {
   where: TeamWhereUniqueInput!
   data: TeamUpdateWithoutLeagueDataInput!
+}
+
+input TeamUpsertWithoutAwayMatchesInput {
+  update: TeamUpdateWithoutAwayMatchesDataInput!
+  create: TeamCreateWithoutAwayMatchesInput!
+}
+
+input TeamUpsertWithoutHomeMatchesInput {
+  update: TeamUpdateWithoutHomeMatchesDataInput!
+  create: TeamCreateWithoutHomeMatchesInput!
 }
 
 input TeamUpsertWithoutPlayersInput {
@@ -954,6 +1868,12 @@ input TeamWhereInput {
   players_every: PlayerWhereInput
   players_some: PlayerWhereInput
   players_none: PlayerWhereInput
+  homeMatches_every: MatchWhereInput
+  homeMatches_some: MatchWhereInput
+  homeMatches_none: MatchWhereInput
+  awayMatches_every: MatchWhereInput
+  awayMatches_some: MatchWhereInput
+  awayMatches_none: MatchWhereInput
   AND: [TeamWhereInput!]
   OR: [TeamWhereInput!]
   NOT: [TeamWhereInput!]

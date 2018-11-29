@@ -1,31 +1,6 @@
 import fs from "fs";
 import { JSDOM } from "jsdom";
-
-export interface IPlayerMatchData {
-    position: string;
-    goals: number;
-    assists: number;
-    ownGoals: number;
-    yellowCards: boolean;
-    secondYellows: boolean;
-    redCards: boolean;
-    substitutedOn: number;
-    substitutedOff: number;
-    minutesPlayed: number;
-}
-
-export interface IDayMatchData {
-    day: number;
-    date: string;
-    homeTeam: string;
-    homeTeamRanking: number;
-    awayTeam: string;
-    awayTeamRanking: number;
-    result: string;
-    playerData: OnTheBench | NotInSquad | IPlayerMatchData;
-}
-export type OnTheBench = "on the bench";
-export type NotInSquad = "not in squad";
+import { IDayMatchData, IPlayerMatchData, PlayerStatus } from "../../types";
 
 function getNumberInCell(cell: HTMLElement) {
     const content = cell.textContent as string;
@@ -59,20 +34,70 @@ function parsePremierLeagueTable(table: HTMLElement) {
         const result = (cells[6].textContent as string).slice(0, -1);
 
         const rowContent = row.textContent as string;
-        if (rowContent.includes("on the bench")) {
-            return matchData = {
-                day,
-                date,
-                homeTeam,
-                homeTeamRanking,
-                awayTeam,
-                awayTeamRanking,
-                result,
-                playerData: "on the bench",
-            };
+
+        const isOnTheBench = rowContent.includes("on the bench");
+        const isNotInSquad = rowContent.includes("Not in squad");
+        const isInjured = row.innerHTML.includes("verletzt-table");
+        const isInSecondTeam = rowContent.includes("With 2nd team");
+        const isRedSuspended = rowContent.includes("Red card suspension");
+        const isYellowSuspended = rowContent.includes("Yellow card suspension");
+        const isInU21 = rowContent.includes("With U21");
+        const isInInternational = rowContent.includes("international match");
+        const hasNoInfo = rowContent.includes("No information available");
+        const hasIndirectCardSuspension = rowContent.includes("Indirect card suspension");
+        const isNoEligible = rowContent.includes("No eligibility");
+
+        let playerStatus;
+
+        switch (true) {
+            case isOnTheBench:
+                playerStatus = PlayerStatus.ON_THE_BENCH;
+                break;
+            case isNotInSquad:
+                playerStatus = PlayerStatus.NOT_IN_SQUAD;
+                break;
+            case isInjured:
+                playerStatus = PlayerStatus.INJURED;
+                break;
+            case isInSecondTeam:
+                playerStatus = PlayerStatus.SECOND_TEAM;
+                break;
+            case isRedSuspended:
+                playerStatus = PlayerStatus.RED_CARD_SUSPENSION;
+                break;
+            case isInU21:
+                playerStatus = PlayerStatus.WITH_U21;
+                break;
+            case hasNoInfo:
+                playerStatus = PlayerStatus.NO_INFORMATION;
+                break;
+            case isInInternational:
+                playerStatus = PlayerStatus.INTERNATIONAL;
+                break;
+            case hasIndirectCardSuspension:
+                playerStatus = PlayerStatus.INDIRECT_SUSPENSION;
+                break;
+            case isYellowSuspended:
+                playerStatus = PlayerStatus.YELLOW_CARD_SUSPENSION;
+                break;
+            case isNoEligible:
+                playerStatus = PlayerStatus.NO_ELIGIBLE;
+                break;
         }
 
-        if (rowContent.includes("Not in squad")) {
+        if (
+            isOnTheBench ||
+            isNotInSquad ||
+            isInjured ||
+            isInSecondTeam ||
+            isRedSuspended ||
+            isInU21 ||
+            hasNoInfo ||
+            isInInternational ||
+            hasIndirectCardSuspension ||
+            isYellowSuspended ||
+            isNoEligible
+        ) {
             return matchData = {
                 day,
                 date,
@@ -81,7 +106,8 @@ function parsePremierLeagueTable(table: HTMLElement) {
                 awayTeam,
                 awayTeamRanking,
                 result,
-                playerData: "not in squad",
+                playerStatus,
+                stats: null,
             };
         }
 
@@ -106,7 +132,8 @@ function parsePremierLeagueTable(table: HTMLElement) {
             awayTeam,
             awayTeamRanking,
             result,
-            playerData: {
+            playerStatus: PlayerStatus.PLAYED,
+            stats: {
                 position,
                 goals,
                 assists,
@@ -139,14 +166,13 @@ function searchForPremierLeagueTable(boxes: NodeListOf<Element>): HTMLElement | 
 }
 
 export function extractPlayerData(filePath: string, distPath: string) {
-    console.log(filePath);
     const data = fs.readFileSync(filePath);
-    // fs.readFileSync(filePath, async (err, data) => {
     const dom = new JSDOM(data);
     const boxes = dom.window.document.querySelectorAll(".box");
 
     const table = searchForPremierLeagueTable(boxes);
     if (table) {
+        // console.log(table.textContent);
         const obj = parsePremierLeagueTable(table);
         const json = JSON.stringify(obj);
         fs.writeFileSync(distPath, json);
@@ -155,5 +181,4 @@ export function extractPlayerData(filePath: string, distPath: string) {
         console.log("no premier league table");
         return;
     }
-    // });
 }
