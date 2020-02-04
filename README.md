@@ -2,9 +2,9 @@
 
 # Contains
 * Scraping scripts using phantom.js to get data from websites by storing html after the complete load of the pages.
-* Script to parse html on the server side to extract interesting data into json files. (It's the exact oposite of what
+* Scripts to parse html on the server side to extract interesting data into json files. (It's the exact oposite of what
  you do when you build web applications based on data.)
-* Script to store data from json file in a database with a graphQL API. At a point json file was of course not what I wanted
+* Scripts to store data from json file in a database with a graphQL API. At a point json file was of course not what I wanted
 in order to visualized all the datas, and to query specific data.
 
 # Initial goal
