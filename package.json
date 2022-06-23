@@ -13,7 +13,7 @@
     "@types/jsdom": "^12.2.0",
     "@types/phantom": "^3.2.5",
     "graphql-yoga": "^1.16.7",
-    "jsdom": "^13.0.0",
+    "jsdom": "^16.5.0",
     "phantom": "^6.0.3",
     "prisma-client-lib": "^1.21.0",
     "webpage": "^0.3.0"
